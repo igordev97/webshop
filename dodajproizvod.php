@@ -53,6 +53,7 @@
                
                     </div>
                     <ul class="navbar-nav me-auto mb-2 mb-lg-0 mx-5">
+
                     <?php if(!isset($_SESSION['korisnik'])):?>
                         <li class="nav-item">
                         <a class="nav-link active" aria-current="page" href="login.php">Uloguj se</a>
@@ -65,6 +66,7 @@
                         <span><img src="./svg_icons/user.svg" class="icon" alt=""></span>
                         <span class="text-light mx-2"><?=$_SESSION["korisnik"]?></span>
                         <a class="nav-link mx-3" aria-current="page" href="./src/logout.php">Odjavi se </a>
+                        <a href="" class="nav-link cart"><img src="./svg_icons/cart.svg" alt="" class="icon"> Korpa</a>
                     </li>
                     <?php endif;?>
                     <?php if(isset($_SESSION['korisnik']) && $_SESSION['korisnik'] == 'admin'):?>
@@ -72,10 +74,33 @@
                         <a class="nav-link active" aria-current="page" href="./dodajproizvod.php">Dodaj Proizvod</a>
                     </li>
                     <?php endif;?>
+
                     </ul>
                 </div>
             </nav>
 
+            
+            <?php if(isset($_SESSION["korisnik"]) && $_SESSION["korisnik"] == 'admin'):?>
+                <div class="container">
+                <div class="row">
+                    <div class="col-12 mx-auto my-5">
+                    <p class="text-dark text-center display-4">Dobro nam dosao admine</p>
+                    
+                    </div>
+                </div>
+            </div>
+
+            <?php else :?>
+                <div class="container">
+                <div class="row">
+                    <div class="col-12 mx-auto my-5">
+                    <p class="text-dark text-center display-4">MORATE BITI ULOGOVANI KAO ADMIN</p>
+                    
+                    </div>
+                </div>
+            </div>
+
+            <?php endif;?>
     
 
 

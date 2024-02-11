@@ -26,7 +26,7 @@
 
                     <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                         <li class="nav-item">
-                        <a class="nav-link active" aria-current="page" href="">Pocetna</a>
+                        <a class="nav-link active" aria-current="page" href="./">Pocetna</a>
                         </li>
                         <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -65,6 +65,7 @@
                         <span><img src="./svg_icons/user.svg" class="icon" alt=""></span>
                         <span class="text-light mx-2"><?=$_SESSION["korisnik"]?></span>
                         <a class="nav-link mx-3" aria-current="page" href="./src/logout.php">Odjavi se </a>
+                        <a href="" class="nav-link cart"><img src="./svg_icons/cart.svg" alt="" class="icon"> Korpa</a>
                     </li>
                     <?php endif;?>
                     <?php if(isset($_SESSION["korisnik"]) && $_SESSION["korisnik"] == 'admin'):?>
@@ -77,7 +78,8 @@
             </nav>
 
 
-            <div class="container">
+            <?php if(!isset($_SESSION['korisnik'])):?>
+                <div class="container">
         <div class="row vh-100 d-flex align-items-center">
             <div class="col-6 mx-auto">
                 <h1 class="text-center mb-5">Uloguj se</h1>
@@ -98,7 +100,7 @@
                     <p class="text-danger"><?= $_GET["error"]?></p>
                 <?php endif;?>
 
-                <?php if(isset($_GET["success"])):?>
+            <?php if(isset($_GET["success"])):?>
                 
                 <p class="text-success"><?= $_GET["success"]?></p>
             <?php endif;?>
@@ -106,6 +108,16 @@
             </div>
         </div>
     </div>
+    <?php else:?>
+            <div class="container">
+                <div class="row">
+                    <div class="col-12 mx-auto my-5">
+                    <p class="text-dark text-center display-4">PAGE NOT FOUND ERROR 404</p>
+                    
+                    </div>
+                </div>
+            </div>
+    <?php endif;?>
 
 
 

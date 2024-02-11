@@ -1,3 +1,7 @@
+<?php
+    require_once "./src/load_session.php";
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -49,7 +53,8 @@
                
                     </div>
                     <ul class="navbar-nav me-auto mb-2 mb-lg-0 mx-5">
-                    <?php if(!isset($_SESSION['korisnik'])):?>
+
+                    <?php if(!isset($_SESSION["korisnik"])):?>
                         <li class="nav-item">
                         <a class="nav-link active" aria-current="page" href="login.php">Uloguj se</a>
                     </li>
@@ -57,16 +62,19 @@
                         <a class="nav-link active" aria-current="page" href="./registracija.php">Registruj se</a>
                     </li>
                     <?php else:?>
-                        <li class="nav-item">
-                        <img src="./svg_icons/user.svg" alt="">
-                        <a class="nav-link active" aria-current="page" href="./logout.php">Odjavi se</a>
+                        <li class="nav-item d-flex align-items-center">
+                        <span><img src="./svg_icons/user.svg" class="icon" alt=""></span>
+                        <span class="text-light mx-2"><?=$_SESSION["korisnik"]?></span>
+                        <a class="nav-link mx-3" aria-current="page" href="./src/logout.php">Odjavi se </a>
+                        <a href="" class="nav-link cart"><img src="./svg_icons/cart.svg" alt="" class="icon"> Korpa</a>
                     </li>
                     <?php endif;?>
-                    <?php if(isset($_SESSION['korisnik']) && $_SESSION['korisnik'] == 'admin'):?>
+                    <?php if(isset($_SESSION["korisnik"]) && $_SESSION["korisnik"] == 'admin'):?>
                         <li class="nav-item">
                         <a class="nav-link active" aria-current="page" href="./dodajproizvod.php">Dodaj Proizvod</a>
                     </li>
                     <?php endif;?>
+
                     </ul>
                 </div>
             </nav>

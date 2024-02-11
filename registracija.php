@@ -65,6 +65,7 @@
                         <span><img src="./svg_icons/user.svg" class="icon" alt=""></span>
                         <span class="text-light mx-2"><?=$_SESSION["korisnik"]?></span>
                         <a class="nav-link mx-3" aria-current="page" href="./src/logout.php">Odjavi se </a>
+                        <a href="" class="nav-link cart"><img src="./svg_icons/cart.svg" alt="" class="icon"> Korpa</a>
                     </li>
                     <?php endif;?>
                     <?php if(isset($_SESSION['korisnik']) && $_SESSION['korisnik'] == 'admin'):?>
@@ -76,6 +77,7 @@
                 </div>  
             </nav>
 
+   <?php if(!isset($_SESSION['korisnik'])):?>
     <div class="container">
         <div class="row vh-100 d-flex align-items-center">
             <div class="col-6 mx-auto">
@@ -112,6 +114,16 @@
             </div>
         </div>
     </div>
+    <?php else:?>
+        <div class="container">
+                <div class="row">
+                    <div class="col-12 mx-auto my-5">
+                    <p class="text-dark text-center display-4">PAGE NOT FOUND ERROR 404</p>
+                    
+                    </div>
+                </div>
+            </div>
+    <?php endif;?>   
 
 
 

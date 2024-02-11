@@ -65,6 +65,7 @@
                         <span><img src="./svg_icons/user.svg" class="icon" alt=""></span>
                         <span class="text-light mx-2"><?=$_SESSION["korisnik"]?></span>
                         <a class="nav-link mx-3" aria-current="page" href="./src/logout.php">Odjavi se </a>
+                        <a href="" class="nav-link cart"><img src="./svg_icons/cart.svg" alt="" class="icon"> Korpa</a>
                     </li>
                     <?php endif;?>
                     <?php if(isset($_SESSION['korisnik']) && $_SESSION['korisnik'] == 'admin'):?>
