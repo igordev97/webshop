@@ -1,5 +1,7 @@
 <?php
+    require_once "./src/database.php";
     require_once "./src/load_session.php";
+    require_once "./src/ucitajproizvode.php";
 ?>
 
 <!DOCTYPE html>
@@ -22,7 +24,7 @@
                     <button class="navbar-toggler bg-light" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                     </button>
-                    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                    <div class="collapse navbar-collapse d-flex justify-content-evenly" id="navbarSupportedContent">
 
                     <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                         <li class="nav-item">
@@ -50,34 +52,61 @@
                         <input class="form-control me-2" type="search" placeholder="Pretrazi proizvod" aria-label="Search">
                         <button class="btn btn-outline-light" type="submit">Pretraga</button>
                     </form>
-               
-                    </div>
                     <ul class="navbar-nav me-auto mb-2 mb-lg-0 mx-5">
 
-                    <?php if(!isset($_SESSION["korisnik"])):?>
+                        <?php if(!isset($_SESSION["korisnik"])):?>
+                            <li class="nav-item">
+                            <a class="nav-link active" aria-current="page" href="login.php">Uloguj se</a>
+                        </li>
                         <li class="nav-item">
-                        <a class="nav-link active" aria-current="page" href="login.php">Uloguj se</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link active" aria-current="page" href="./registracija.php">Registruj se</a>
-                    </li>
-                    <?php else:?>
-                        <li class="nav-item d-flex align-items-center">
-                        <span><img src="./svg_icons/user.svg" class="icon" alt=""></span>
-                        <span class="text-light mx-2"><?=$_SESSION["korisnik"]?></span>
-                        <a class="nav-link mx-3" aria-current="page" href="./src/logout.php">Odjavi se </a>
-                        <a href="" class="nav-link cart"><img src="./svg_icons/cart.svg" alt="" class="icon"> Korpa</a>
-                    </li>
-                    <?php endif;?>
-                    <?php if(isset($_SESSION["korisnik"]) && $_SESSION["korisnik"] == 'admin'):?>
-                        <li class="nav-item">
-                        <a class="nav-link active" aria-current="page" href="./dodajproizvod.php">Dodaj Proizvod</a>
-                    </li>
-                    <?php endif;?>
+                            <a class="nav-link active" aria-current="page" href="./registracija.php">Registruj se</a>
+                        </li>
+                        <?php else:?>
+                            <li class="nav-item d-flex align-items-center">
+                            <span><img src="./svg_icons/user.svg" class="icon" alt=""></span>
+                            <span class="text-light mx-2"><?=$_SESSION["korisnik"]?></span>
+                            <a class="nav-link mx-3" aria-current="page" href="./src/logout.php">Odjavi se </a>
+                            <a href="" class="nav-link cart"><img src="./svg_icons/cart.svg" alt="" class="icon"> Korpa</a>
+                        </li>
+                        <?php endif;?>
+                        <?php if(isset($_SESSION["korisnik"]) && $_SESSION["korisnik"] == 'admin'):?>
+                            <li class="nav-item">
+                            <a class="nav-link active" aria-current="page" href="./admin_panel/panel.php">Admin Panel</a>
+                        </li>
+                        <?php endif;?>
 
                     </ul>
+                    </div>
+                    
+                    
                 </div>
             </nav>
+
+
+            <div class="container">
+                <div class="row">
+                    <div class="col-12 mx-auto p-4 d-flex">
+                        <?php foreach($proizvodi as $proizvod):?>
+
+                        <div class="col-3">
+                        <div class="card" style="width: 18rem;">
+                                <img src="./products_img/<?=$proizvod["slika_proizvoda"]?>" class="card-img-top" alt="...">
+                                <div class="card-body">
+                                    <h5 class="card-title"><?=$proizvod["ime_proizvoda"]?></h5>
+                                    <p class="card-text"><?=$proizvod["opis_proizvoda"]?></p>
+                                    <input type="hidden" name="id" value="<?=$proizvod["id"]?>">
+                                    <h6 class="card-title"><?=$proizvod["cena_proizvoda"]?> RSD</h6>
+                                    <p>Kategorija: <a href="./kategorija.php?kategorija=<?=$proizvod["kategorija_proizvoda"]?>"><?=$proizvod["kategorija_proizvoda"]?></a></p>
+                                    <a href="#" class="btn btn-primary">Dodaj u Korpu</a>
+                                </div>
+                                </div>
+
+                        </div>
+                            
+                         <?php endforeach;?>   
+                    </div>
+                </div>
+            </div>
 
 
 
