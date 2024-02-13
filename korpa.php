@@ -1,5 +1,14 @@
 <?php
+    require_once("./src/database.php");
     require_once "./src/load_session.php";
+    if(!isset($_POST["id"]) || empty(trim($_POST["id"]))){
+        die("Stranica ne postoji");
+    }
+    $id = $_POST["id"];
+    $result = $db->query("SELECT * FROM proizvodi WHERE id='$id'");
+    if($result->num_rows > 0){
+        $proizvod = $result->fetch_assoc();
+    }
 ?>
 
 <!DOCTYPE html>
@@ -26,7 +35,7 @@
 
                     <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                         <li class="nav-item">
-                        <a class="nav-link active" aria-current="page" href="">Pocetna</a>
+                        <a class="nav-link active" aria-current="page" href="./">Pocetna</a>
                         </li>
                         <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -47,7 +56,7 @@
                         
                     </ul>
                     <form class="d-flex" role="search" method="get" action="./pretraga.php">
-                        <input class="form-control me-2" type="search" placeholder="Pretrazi proizvod" aria-label="Search">
+                        <input class="form-control me-2" type="search" name="pretraga"placeholder="Pretrazi proizvod" aria-label="Search">
                         <button class="btn btn-outline-light" type="submit">Pretraga</button>
                     </form>
                
@@ -80,8 +89,43 @@
             </nav>
 
 
-            <div class="container"></div>
+            <?php if(!isset($_SESSION["korisnik"])):?>
+                <p class="text-danger display-5">Morate biti ulogovani</p>
+            <?php else:?>
+                <div class="container">
+                    <div class="row">
+                        <div class="col-12">
+                            <h1 class="text-center">Korpa</h1>
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th></th>
+                                        <th>Ime</th>
+                                        <th>Kolicina</th>
+                                        <th>Cena</th>
+                                        <th></th>
+                                    </tr>
+                                </thead>
+                               <tbody>
+                               <tr class="d-flex gap-3">
+                                    <td><img src="./products_img/<?=$proizvod["slika_proizvoda"]?>" alt="" width="50px"></td>
+                                    <td><?=$proizvod["ime_proizvoda"]?></td>
+                                    <td><input type="number" name="kolicina_proizvoda" value="1"></td>
+                                    <td><?=$proizvod["cena_proizvoda"]?></td>
+                                    <td>
+                                        <form action="./src/delete.php" method="post">
+                                            <input type="hidden" name="<?=$proizvod["id"]?>">
+                                            <button class="btn btn-outline-danger">X</button>
+                                        </form>
+                                    </td>
+                                </tr>
+                               </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
 
+            <?php endif;?>
 
     
 

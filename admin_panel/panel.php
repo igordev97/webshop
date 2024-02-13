@@ -39,8 +39,19 @@ require_once "../src/ucitajproizvode.php";
                             <hr>
                         </ul>
                     </div> 
-                    <div class="col-9 vh-100 mx-auto">
+                    <div class="col-9 vh-100 mx-auto" id="lista-proizvoda">
                     <?php if(isset($_GET["panel"])  && $_GET["panel"] == "proizvodi"):?>
+
+                        <?php if(isset($_GET["success"])):?>
+                            <p class="text-success"><?=$_GET["success"]?></p>
+                         <?php endif;?>
+                         <?php if(isset($_GET["error"])):?>
+                            <p class="text-danger"><?=$_GET["error"]?></p>
+                            <?php endif;?>
+                            
+                            <?php if(empty($proizvodi)):?>
+                                <p class="text-warning">Trenutno nemate proizvode na sajtu</p>
+                            <?php else:?>
                         <table class="table table-striped ">
                             <thead>
                                 <tr>
@@ -56,23 +67,36 @@ require_once "../src/ucitajproizvode.php";
                                 </tr>
                             </thead>
                             <tbody>
-                        <?php foreach($proizvodi as $proizvod):?>
+                            <?php foreach($proizvodi as $proizvod):?>
                             <tr>
+                                <form action="./update.php" method="post">
                                 <td><img src="../products_img/<?=$proizvod["slika_proizvoda"]?>" alt="" width="30px"></td>
-                                <td><input type="hidden" name="id_proizvoda" value="<?=$proizvod["id"]?>"><?=$proizvod["id"]?></td>
-                                <td><?=$proizvod["ime_proizvoda"]?></td>
+
+                                <td><input type="hidden" name="id" value="<?=$proizvod["id"]?>"><?=$proizvod["id"]?></td>
+
+                                <td><input type="text" name="ime_proizvoda" value="<?=$proizvod["ime_proizvoda"]?>"></td>
+
                                 <td><input type="number" name="cena_proizvoda" value="<?=$proizvod["cena_proizvoda"]?>"></td>
                                 <td><input type="number" name="kolicina_proizvoda" value="<?=$proizvod["kolicina_proizvoda"]?>"></td>
-                                <td><form action="../src/" method="post"><button class="btn btn-warning">Update</button></form></td>
-                                <td><form action="../src/" method="post"><button class="btn btn-danger">Delete</button></form></td>
+                                <td><button class="btn btn-warning">Update</button> </td>
+                                </form>
+                                <td>
+                                    <form action="./delete.php" method="post">
+                                    <input type="hidden" name="id" value="<?=$proizvod["id"]?>">
+                                    <button class="btn btn-danger">Delete</button>
+                                </form>
+                            </td>
                             </tr>
 
+
                                 
-                            <?php endforeach;?>   
+                            <?php endforeach;?> 
+                            
+
                         </tbody>
                         </table>
                           
-                     
+                        <?php endif;?> 
                    <?php endif;?>   
 
 

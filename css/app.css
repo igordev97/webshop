@@ -34,3 +34,12 @@ nav a{
     text-align: center;
     padding: 2rem;
 }
+
+.cover-img{
+    width: 200px;
+    height: 200px;
+}
+
+#lista-proizvoda{
+    overflow-x: hidden;
+}

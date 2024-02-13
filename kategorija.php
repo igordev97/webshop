@@ -1,5 +1,14 @@
 <?php
     require_once "./src/load_session.php";
+    require_once "./src/database.php";
+    $kategorija = $_GET["kategorija"];
+
+
+    $result = $db->query("SELECT * FROM proizvodi WHERE kategorija_proizvoda='$kategorija'");
+   
+   
+    $proizvodi = $result -> fetch_all(MYSQLI_ASSOC);
+
 ?>
 
 <!DOCTYPE html>
@@ -26,7 +35,7 @@
 
                     <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                         <li class="nav-item">
-                        <a class="nav-link active" aria-current="page" href="">Pocetna</a>
+                        <a class="nav-link active" aria-current="page" href="./">Pocetna</a>
                         </li>
                         <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -47,7 +56,7 @@
                         
                     </ul>
                     <form class="d-flex" role="search" method="get" action="./pretraga.php">
-                        <input class="form-control me-2" type="search" placeholder="Pretrazi proizvod" aria-label="Search">
+                        <input class="form-control me-2" type="search" placeholder="Pretrazi proizvod" name="pretraga"aria-label="Search">
                         <button class="btn btn-outline-light" type="submit">Pretraga</button>
                     </form>
                
@@ -70,12 +79,45 @@
                     <?php endif;?>
                     <?php if(isset($_SESSION['korisnik']) && $_SESSION['korisnik'] == 'admin'):?>
                         <li class="nav-item">
-                        <a class="nav-link active" aria-current="page" href="./dodajproizvod.php">Dodaj Proizvod</a>
+                        <a class="nav-link active" aria-current="page" href="./admin_panel/panel.php?panel=proizvodi">Admin Panel</a>
                     </li>
                     <?php endif;?>
                     </ul>
                 </div>
             </nav>
+
+
+            <div class="container">
+                <div class="row">
+                <h1 class='text-center my-5'>Kategorija - <?=$kategorija?></h1>
+                    <div class="col-12 d-flex p-4">
+                        <?php if(empty($proizvodi)):?>
+                            <p class="text-center display-warning">Nemate proizvode sa kategorijom "<?=$kategorija?>"</p>
+                        <?php else:?>
+                            
+                                <?php foreach($proizvodi as $proizvod):?>
+                                    <div class="card" style="width:18rem;">
+                                <a href="./proizvod.php?id=<?=$proizvod["id"]?>">
+                                <img src="./products_img/<?=$proizvod["slika_proizvoda"]?>" class="card-img-top cover-img" alt="...">
+                            </a>
+                                <div class="card-body">
+                                <a href="./proizvod.php?id=<?=$proizvod["id"]?>">
+                                    <h5 class="card-title"><?=$proizvod["ime_proizvoda"]?></h5>
+                                </a>
+                                    <h6 class="card-title"><?=$proizvod["cena_proizvoda"]?> RSD</h6>
+                                    <p>Kategorija: <a href="./kategorija.php?kategorija=<?=$proizvod["kategorija_proizvoda"]?>"><?=$proizvod["kategorija_proizvoda"]?></a></p>
+                                    <form action="./korpa.php" method="post">
+                                    <input type="hidden" name="id" value="<?=$proizvod["id"]?>">
+                                        <button class="btn btn-primary">Dodaj u Korpu</button>
+                                    </form>
+                                </div>
+                                </div>
+                                <?php endforeach;?>    
+                                
+                        <?php endif;?>
+                    </div>
+                </div>
+            </div>
 
 
 

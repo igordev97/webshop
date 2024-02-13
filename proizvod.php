@@ -1,7 +1,16 @@
 <?php
     require_once "./src/database.php";
     require_once "./src/load_session.php";
-    require_once "./src/ucitajproizvode.php";
+    if(!isset($_GET["id"]) || empty(trim($_GET["id"]))){
+        die("Stranica ne postoji");
+    }  
+    $id = $_GET["id"];
+    $result = $db->query("SELECT * FROM proizvodi WHERE id='$id'");
+    if(!$result->num_rows > 0){
+        die("Nismo pronasli proizvod u bazi");
+    }
+    $proizvod = $result->fetch_assoc();
+
 ?>
 
 <!DOCTYPE html>
@@ -28,7 +37,7 @@
 
                     <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                         <li class="nav-item">
-                        <a class="nav-link active" aria-current="page" href="">Pocetna</a>
+                        <a class="nav-link active" aria-current="page" href="./">Pocetna</a>
                         </li>
                         <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -69,12 +78,12 @@
                             <a href="" class="nav-link cart"><img src="./svg_icons/cart.svg" alt="" class="icon"> Korpa</a>
                         </li>
                         <?php endif;?>
+
                         <?php if(isset($_SESSION["korisnik"]) && $_SESSION["korisnik"] == 'admin'):?>
                             <li class="nav-item">
-                            <a class="nav-link active" aria-current="page" href="./admin_panel/panel.php?panel=proizvodi">Admin Panel</a>
+                            <a class="nav-link active" aria-current="page" href="./admin_panel/panel.php">Admin Panel</a>
                         </li>
                         <?php endif;?>
-
                     </ul>
                     </div>
                     
@@ -85,31 +94,10 @@
 
             <div class="container">
                 <div class="row">
-                    <div class="col-12 mx-auto p-4 d-flex">
-                        <?php foreach($proizvodi as $proizvod):?>
-
-                        <div class="col-3">
-                        <div class="card" style="width:18rem;">
-                                <a href="./proizvod.php?id=<?=$proizvod["id"]?>">
-                                <img src="./products_img/<?=$proizvod["slika_proizvoda"]?>" class="card-img-top cover-img" alt="...">
-                            </a>
-                                <div class="card-body">
-                                <a href="./proizvod.php?id=<?=$proizvod["id"]?>">
-                                    <h5 class="card-title"><?=$proizvod["ime_proizvoda"]?></h5>
-                                </a>
-                                    <h6 class="card-title"><?=$proizvod["cena_proizvoda"]?> RSD</h6>
-                                    <p>Kategorija: <a href="./kategorija.php?kategorija=<?=$proizvod["kategorija_proizvoda"]?>"><?=$proizvod["kategorija_proizvoda"]?></a></p>
-                                    <form action="./korpa.php" method="post">
-                                    <input type="hidden" name="id" value="<?=$proizvod["id"]?>">
-                                        <button class="btn btn-primary">Dodaj u Korpu</button>
-                                    </form>
-                                </div>
-                                </div>
-
-                        </div>
-                            
-                         <?php endforeach;?>   
-                    </div>
+                  <div class="col-8 mx-auto d-flex justify-content-center flex-column align-items-center">
+                  <h3 class="">Proizvod - <?=$proizvod["ime_proizvoda"]?></h3>
+                   <p class="lead">Opis <?=$proizvod["opis_proizvoda"]?></p>
+                  </div>
                 </div>
             </div>
 

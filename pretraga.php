@@ -1,5 +1,14 @@
 <?php
+    require_once "./src/database.php";
     require_once "./src/load_session.php";
+
+    $pretraga = $_GET["pretraga"];
+    $result = $db->query("SELECT * FROM proizvodi WHERE ime_proizvoda LIKE '%$pretraga%' OR opis_proizvoda LIKE '%$pretraga%'");
+    
+    if($result){
+        $proizvodi = $result->fetch_all(MYSQLI_ASSOC);
+    }
+    
 ?>
 
 <!DOCTYPE html>
@@ -26,7 +35,7 @@
 
                     <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                         <li class="nav-item">
-                        <a class="nav-link active" aria-current="page" href="">Pocetna</a>
+                        <a class="nav-link active" aria-current="page" href="./">Pocetna</a>
                         </li>
                         <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -47,7 +56,7 @@
                         
                     </ul>
                     <form class="d-flex" role="search" method="get" action="./pretraga.php">
-                        <input class="form-control me-2" type="search" placeholder="Pretrazi proizvod" aria-label="Search">
+                        <input class="form-control me-2" type="search" name="pretraga" placeholder="Pretrazi proizvod" aria-label="Search">
                         <button class="btn btn-outline-light" type="submit">Pretraga</button>
                     </form>
                
@@ -76,6 +85,42 @@
                     </ul>
                 </div>
             </nav>
+
+
+            <div class="container">
+                <div class="row">
+                    <div class="col-12 mx-auto p-4 d-flex">
+                       <?php if(empty($proizvodi)):?>
+                        <p>Nismo pronasli ni jedan rezultat za "<?=$_GET["pretraga"]?>"</p>
+                        <?php else:?>
+                          <?php foreach($proizvodi as $proizvod):?>
+
+                        <div class="col-3">
+                        <div class="card" style="width:18rem;">
+                                <a href="./proizvod.php?id=<?=$proizvod["id"]?>">
+                                <img src="./products_img/<?=$proizvod["slika_proizvoda"]?>" class="card-img-top cover-img" alt="...">
+                            </a>
+                                <div class="card-body">
+                                <a href="./proizvod.php?id=<?=$proizvod["id"]?>">
+                                    <h5 class="card-title"><?=$proizvod["ime_proizvoda"]?></h5>
+                                </a>
+                                    <h6 class="card-title"><?=$proizvod["cena_proizvoda"]?> RSD</h6>
+                                    <p>Kategorija: <a href="./kategorija.php?kategorija=<?=$proizvod["kategorija_proizvoda"]?>"><?=$proizvod["kategorija_proizvoda"]?></a></p>
+                                    <form action="./korpa.php" method="post">
+                                    <input type="hidden" name="id" value="<?=$proizvod["id"]?>">
+                                        <button class="btn btn-primary">Dodaj u Korpu</button>
+                                    </form>
+                                </div>
+                                </div>
+
+                        </div>
+                            
+                         <?php endforeach;?>   
+                         
+                       <?php endif;?>  
+                    </div>
+                </div>
+            </div>
 
 
 

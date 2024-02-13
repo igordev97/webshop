@@ -47,7 +47,7 @@
                         
                     </ul>
                     <form class="d-flex" role="search" method="get" action="./pretraga.php">
-                        <input class="form-control me-2" type="search" placeholder="Pretrazi proizvod" aria-label="Search">
+                        <input class="form-control me-2" name="pretraga" type="search" placeholder="Pretrazi proizvod" aria-label="Search">
                         <button class="btn btn-outline-light" type="submit">Pretraga</button>
                     </form>
                
