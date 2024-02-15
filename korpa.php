@@ -73,13 +73,13 @@ require_once "./src/database.php";
                         <span><img src="./svg_icons/user.svg" class="icon" alt=""></span>
                         <span class="text-light mx-2"><?=$_SESSION["korisnik"]?></span>
                         <a class="nav-link mx-3" aria-current="page" href="./src/logout.php">Odjavi se </a>
-                        <a href="" class="nav-link cart"><img src="./svg_icons/cart.svg" alt="" class="icon"> Korpa</a>
+                       
                     </li>
                     <?php endif;?>
                     <?php if(isset($_SESSION["korisnik"]) && $_SESSION["korisnik"] == 'admin'):?>
                         <li class="nav-item">
-                        <a class="nav-link active" aria-current="page" href="./dodajproizvod.php">Dodaj Proizvod</a>
-                    </li>
+                            <a class="nav-link active" aria-current="page" href="./admin_panel/panel.php?panel=proizvodi">Admin Panel</a>
+                        </li>
                     <?php endif;?>
 
                     </ul>
@@ -129,8 +129,12 @@ require_once "./src/database.php";
 
                                <?php foreach($proizvodi as $proizvod):?>
                                 <tr class="">
-                                    <td><a href="./proizvod.php?id=<?=$proizvod["id"]?>"><img src="./products_img/<?=$proizvod["slika_proizvod"]?>" alt="" width="50px"></a></td>
-                                    <td><?=$proizvod["ime_proizvod"]?></td>
+                                    <td>
+                                        <a href="./proizvod.php?id=<?=$proizvod["id_proizvod"]?>"><img src="./products_img/<?=$proizvod["slika_proizvod"]?>" alt="" width="50px"></a>
+                                    </td>
+                                    <td>
+                                    <a class="link text-dark" href="./proizvod.php?id=<?=$proizvod["id_proizvod"]?>"><?=$proizvod["ime_proizvod"]?></a>
+                                    </td>
                                     <form action="./src/update_korpa.php" method="post">
                                     <td><input type="number" name="kolicina_proizvod" value="<?=$proizvod['kolicina_proizvod']?>" min="1"></td>
                                     <td><?=$proizvod["cena_proizvod"]?></td>
@@ -155,7 +159,7 @@ require_once "./src/database.php";
 
                             <div>
                                 <h1 class="display-5 mt-5 text-primary">Ukupno za placanje: <?=$ukupna_cena?> RSD</h1>
-                                <form action="zavrsi_kupovinu.php" method="post">
+                                <form action="./zavrsikupovinu.php" method="post">
                                     <input type="hidden" name="" value="">
                                     <button class="btn btn-primary">Zavrsi kupovinu</button>
                                 </form>

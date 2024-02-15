@@ -95,7 +95,7 @@
             <div class="container">
                 <div class="row">
                 <h1 class='text-center my-5'>Kategorija - <?=$kategorija?></h1>
-                    <div class="col-12 d-flex p-4">
+                    <div class="col-12 mx-auto p-4 d-flex flex-wrap ">
                         <?php if(empty($proizvodi)):?>
                             <p class="text-center display-warning">Nemate proizvode sa kategorijom "<?=$kategorija?>"</p>
                         <?php else:?>
@@ -111,11 +111,15 @@
                                 </a>
                                     <h6 class="card-title"><?=$proizvod["cena_proizvoda"]?> RSD</h6>
                                     <p>Kategorija: <a href="./kategorija.php?kategorija=<?=$proizvod["kategorija_proizvoda"]?>"><?=$proizvod["kategorija_proizvoda"]?></a></p>
-                                    <form action="./src/dodaj_u_korpu.php" method="post">
+                                    <?php if($proizvod["kolicina_proizvoda"] > 0):?>
+                                        <form action="./src/dodaj_u_korpu.php" method="post">
                                     <input type="hidden" name="id" value="<?=$proizvod["id"]?>">
                                     <input type="hidden" name="kolicina_proizvoda"  min="1" placeholder="1" value="1">
                                         <button class="btn btn-primary">Dodaj u Korpu</button>
                                     </form>
+                                    <?php else:?>
+                                        <button class="btn btn-primary" disabled>Nema na stanju</button>
+                                        <?php endif;?>
                                 </div>
                                 </div>
                                 <?php endforeach;?>    
