@@ -7,8 +7,13 @@
     $result = $db->query("SELECT * FROM proizvodi WHERE kategorija_proizvoda='$kategorija'");
    
    
-    $proizvodi = $result -> fetch_all(MYSQLI_ASSOC);
-
+    if( $result->num_rows > 0){
+        $proizvodi = $result -> fetch_all(MYSQLI_ASSOC);
+    $kategorija = $proizvodi[0]["kategorija_proizvoda"];
+    }
+    
+ 
+    
 ?>
 
 <!DOCTYPE html>
@@ -16,7 +21,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>GG Shop</title>
+    <title>Kategorija - <?=$kategorija?></title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
@@ -106,8 +111,9 @@
                                 </a>
                                     <h6 class="card-title"><?=$proizvod["cena_proizvoda"]?> RSD</h6>
                                     <p>Kategorija: <a href="./kategorija.php?kategorija=<?=$proizvod["kategorija_proizvoda"]?>"><?=$proizvod["kategorija_proizvoda"]?></a></p>
-                                    <form action="./korpa.php" method="post">
+                                    <form action="./src/dodaj_u_korpu.php" method="post">
                                     <input type="hidden" name="id" value="<?=$proizvod["id"]?>">
+                                    <input type="hidden" name="kolicina_proizvoda"  min="1" placeholder="1" value="1">
                                         <button class="btn btn-primary">Dodaj u Korpu</button>
                                     </form>
                                 </div>

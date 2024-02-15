@@ -1,16 +1,7 @@
 <?php
     require_once "./src/database.php";
     require_once "./src/load_session.php";
-    if(!isset($_GET["id"]) || empty(trim($_GET["id"]))){
-        die("Stranica ne postoji");
-    }  
-    $id = $_GET["id"];
-    $result = $db->query("SELECT * FROM proizvodi WHERE id='$id'");
-    if(!$result->num_rows > 0){
-        die("Nismo pronasli proizvod u bazi");
-    }
-    $proizvod = $result->fetch_assoc();
-
+    require_once "./src/proizvod.php";
 ?>
 
 <!DOCTYPE html>
@@ -18,7 +9,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>GG Shop</title>
+    <title><?=$proizvod["ime_proizvoda"]?></title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
@@ -75,7 +66,7 @@
                             <span><img src="./svg_icons/user.svg" class="icon" alt=""></span>
                             <span class="text-light mx-2"><?=$_SESSION["korisnik"]?></span>
                             <a class="nav-link mx-3" aria-current="page" href="./src/logout.php">Odjavi se </a>
-                            <a href="" class="nav-link cart"><img src="./svg_icons/cart.svg" alt="" class="icon"> Korpa</a>
+                            <a href="./korpa.php" class="nav-link cart"><img src="./svg_icons/cart.svg" alt="" class="icon"> Korpa</a>
                         </li>
                         <?php endif;?>
 
@@ -94,9 +85,22 @@
 
             <div class="container">
                 <div class="row">
-                  <div class="col-8 mx-auto d-flex justify-content-center flex-column align-items-center">
-                  <h3 class="">Proizvod - <?=$proizvod["ime_proizvoda"]?></h3>
-                   <p class="lead">Opis <?=$proizvod["opis_proizvoda"]?></p>
+                  <div class="col-8 mx-auto d-flex justify-content-center align-items-center p-5 gap-3">
+                            <div class="col-4">
+                                <img src="./products_img/<?=$proizvod["slika_proizvoda"]?>" alt="" class="img-fluid">
+                            </div>
+                            <div class="col-8">
+                                <h1><?=$proizvod["ime_proizvoda"]?></h1>
+                                <p class="p-5 lead"><?=$proizvod["opis_proizvoda"]?></p>
+                                <p class="text-info">Na stanju: <?=$proizvod["kolicina_proizvoda"]?> komada</p>
+                                <h5>Cena: <?=$proizvod["cena_proizvoda"]?> RSD</h5>
+                                <p>Kategorija: <a href="./kategorija.php?kategorija=<?=$proizvod["kategorija_proizvoda"]?>"><?=$proizvod["kategorija_proizvoda"]?></a></p>
+                                <form action="./src/dodaj_u_korpu.php" method="post">
+                                    <input type="hidden" name="id" value="<?=$proizvod["id"]?>">
+                                    <input type="number" name="kolicina_proizvoda" min="1" value="1">
+                                        <button class="btn btn-primary">Dodaj u Korpu</button>
+                                    </form>
+                            </div>
                   </div>
                 </div>
             </div>

@@ -1,13 +1,11 @@
 <?php
-    require_once("./src/database.php");
-    require_once "./src/load_session.php";
-    if(!isset($_POST["id"]) || empty(trim($_POST["id"]))){
-        die("Stranica ne postoji");
+require_once "./src/database.php";
+    if(session_status()==PHP_SESSION_NONE){
+        session_start();
     }
-    $id = $_POST["id"];
-    $result = $db->query("SELECT * FROM proizvodi WHERE id='$id'");
-    if($result->num_rows > 0){
-        $proizvod = $result->fetch_assoc();
+    
+    if(isset($_SESSION["korisnik"])){
+        require_once "./src/moja_korpa.php";
     }
 ?>
 
@@ -16,7 +14,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>GG Shop</title>
+    <title>Korpa</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
@@ -90,43 +88,97 @@
 
 
             <?php if(!isset($_SESSION["korisnik"])):?>
-                <p class="text-danger display-5">Morate biti ulogovani</p>
-            <?php else:?>
+
                 <div class="container">
                     <div class="row">
-                        <div class="col-12">
-                            <h1 class="text-center">Korpa</h1>
-                            <table class="table">
-                                <thead>
-                                    <tr>
-                                        <th></th>
-                                        <th>Ime</th>
-                                        <th>Kolicina</th>
-                                        <th>Cena</th>
-                                        <th></th>
-                                    </tr>
-                                </thead>
-                               <tbody>
-                               <tr class="d-flex gap-3">
-                                    <td><img src="./products_img/<?=$proizvod["slika_proizvoda"]?>" alt="" width="50px"></td>
-                                    <td><?=$proizvod["ime_proizvoda"]?></td>
-                                    <td><input type="number" name="kolicina_proizvoda" value="1"></td>
-                                    <td><?=$proizvod["cena_proizvoda"]?></td>
-                                    <td>
-                                        <form action="./src/delete.php" method="post">
-                                            <input type="hidden" name="<?=$proizvod["id"]?>">
-                                            <button class="btn btn-outline-danger">X</button>
-                                        </form>
-                                    </td>
-                                </tr>
-                               </tbody>
-                            </table>
+                        <div class="col-5 mx-auto">
+                        <p class="text-danger display-5">Morate biti ulogovani</p>
                         </div>
                     </div>
                 </div>
 
-            <?php endif;?>
+                <?php else:?>
 
+                    <?php if(empty($proizvodi)):?>
+                     <div class="container">
+                    <div class="row p-5">
+                        <div class="col-5 mx-auto">
+                        <p class="text-danger">Nema proizvoda u korpi</p>
+                        </div>
+                    </div>
+                </div>
+                     <?php else:?>
+                        <div class="conatiner">
+                            <div class="row">
+                                <div class="col-6 mx-auto">
+
+
+                                    <h1 class="text-center my-4">Korpa</h1>
+                                <table class="table">
+                                <thead>
+                                    <tr>
+                                    <th scope="col">#</th>
+                                    <th scope="col">Ime</th>
+                                    <th scope="col">Kolicina</th>
+                                    <th scope="col">Cena</th>
+                                    <th scope="col">Izmeni</th>
+                                    <th scope="col">izbrisi</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+
+                               <?php foreach($proizvodi as $proizvod):?>
+                                <tr class="">
+                                    <td><a href="./proizvod.php?id=<?=$proizvod["id"]?>"><img src="./products_img/<?=$proizvod["slika_proizvod"]?>" alt="" width="50px"></a></td>
+                                    <td><?=$proizvod["ime_proizvod"]?></td>
+                                    <form action="./src/update_korpa.php" method="post">
+                                    <td><input type="number" name="kolicina_proizvod" value="<?=$proizvod['kolicina_proizvod']?>" min="1"></td>
+                                    <td><?=$proizvod["cena_proizvod"]?></td>
+                                    <td>
+                                        
+                                            <input type="hidden" name="id_korpa" value="<?=$proizvod["id"]?>">
+                                            <input type="hidden" name="id_proizvod" value="<?=$proizvod["id_proizvod"]?>">
+                                            <button class="btn btn-outline-primary">Izmeni</button>
+                                        </form>
+                                    </td>
+                                    <td>
+                                        <form action="./src/delete.php" method="post">
+                                            <input type="hidden" name="id_korpa" value="<?=$proizvod["id"]?>">
+                                            <button class="btn btn-outline-danger">X</button>
+                                        </form>
+                                    </td>
+                                </tr>
+                                <?php endforeach;?>
+
+                               </tbody>
+                            </table>
+
+                            <div>
+                                <h1 class="display-5 mt-5 text-primary">Ukupno za placanje: <?=$ukupna_cena?> RSD</h1>
+                                <form action="zavrsi_kupovinu.php" method="post">
+                                    <input type="hidden" name="" value="">
+                                    <button class="btn btn-primary">Zavrsi kupovinu</button>
+                                </form>
+                            </div>
+                                </div>
+                            </div>
+                        </div>
+
+                      <?php endif;?>     
+
+            <?php endif;?>
+              
+                <div class="container">
+                    <div class="row">
+                        <div class="col-5 mx-auto">
+                        <?php if(isset($_GET["error"])):?>
+                                    <p><?=$_GET["error"]?></p>
+                                 <?php endif;?> 
+                        </div>
+                    </div>
+                </div>
+
+            
     
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>

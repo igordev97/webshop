@@ -66,7 +66,7 @@
                             <span><img src="./svg_icons/user.svg" class="icon" alt=""></span>
                             <span class="text-light mx-2"><?=$_SESSION["korisnik"]?></span>
                             <a class="nav-link mx-3" aria-current="page" href="./src/logout.php">Odjavi se </a>
-                            <a href="" class="nav-link cart"><img src="./svg_icons/cart.svg" alt="" class="icon"> Korpa</a>
+                            <a href="./korpa.php" class="nav-link cart"><img src="./svg_icons/cart.svg" alt="" class="icon"> Korpa</a>
                         </li>
                         <?php endif;?>
                         <?php if(isset($_SESSION["korisnik"]) && $_SESSION["korisnik"] == 'admin'):?>
@@ -99,8 +99,9 @@
                                 </a>
                                     <h6 class="card-title"><?=$proizvod["cena_proizvoda"]?> RSD</h6>
                                     <p>Kategorija: <a href="./kategorija.php?kategorija=<?=$proizvod["kategorija_proizvoda"]?>"><?=$proizvod["kategorija_proizvoda"]?></a></p>
-                                    <form action="./korpa.php" method="post">
+                                    <form action="./src/dodaj_u_korpu.php" method="post">
                                     <input type="hidden" name="id" value="<?=$proizvod["id"]?>">
+                                    <input type="hidden" name="kolicina_proizvoda"  min="1" placeholder="1" value="1">
                                         <button class="btn btn-primary">Dodaj u Korpu</button>
                                     </form>
                                 </div>
